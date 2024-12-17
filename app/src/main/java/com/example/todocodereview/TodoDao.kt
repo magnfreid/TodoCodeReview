@@ -8,6 +8,7 @@ import androidx.room.Query
 
 @Dao
 interface TodoDao {
+
     @Insert
     suspend fun insert(todo: Todo)
 
