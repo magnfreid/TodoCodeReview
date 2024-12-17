@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">TodoCodeReview</string>
+    <string name="btn_add">Add</string>
+    <string name="tv_todo_title">Todo App</string>
 </resources>

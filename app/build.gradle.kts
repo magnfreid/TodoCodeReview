@@ -17,6 +17,9 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
+    buildFeatures {
+        viewBinding = true
+    }
 
     buildTypes {
         release {
@@ -37,6 +40,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
