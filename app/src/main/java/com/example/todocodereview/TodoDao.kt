@@ -1,10 +1,10 @@
 package com.example.todocodereview
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TodoDao {
@@ -19,8 +19,8 @@ interface TodoDao {
     suspend fun updateCheckbox(todoId:Int, isChecked: Boolean)
 
     @Query("SELECT * FROM todos")
-    fun getAll(): LiveData<MutableList<Todo>>
+    fun getAll(): Flow<List<Todo>>
 
     @Query("SELECT * FROM todos WHERE isChecked = :isChecked")
-    fun getChecked(isChecked: Boolean): LiveData<MutableList<Todo>>
+    fun getChecked(isChecked: Boolean): Flow<List<Todo>>
 }

@@ -10,13 +10,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.todocodereview.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var viewModel: TodoViewModel
     private lateinit var binding: ActivityMainBinding
+    private lateinit var viewModel: TodoViewModel
+    private lateinit var adapter: TodoAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        viewModel = ViewModelProvider(this)[TodoViewModel()::class.java]
         binding = ActivityMainBinding.inflate(layoutInflater)
-        viewModel = ViewModelProvider(this, TodoViewModelFactory(this))[TodoViewModel::class.java]
         enableEdgeToEdge()
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -26,14 +27,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         val recyclerView = binding.rvTodo
-        val adapter = TodoAdapter(mutableListOf()){todoId, isChecked ->
+        adapter = TodoAdapter(mutableListOf()) { todoId, isChecked ->
             viewModel.updateTodoCheckbox(todoId, isChecked)
         }
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
-        viewModel.todos.observe(this) {
-            adapter.update(it)
-        }
 
         binding.btnAdd.setOnClickListener {
             val name = binding.etNewTodo.text.toString()
@@ -44,12 +42,16 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        viewModel.todos.observe(this) {
+            adapter.update(it.toMutableList())
+        }
+
         viewModel.checkedTodos.observe(this) { checkedTodos ->
             val clearButton = binding.btnClear
             if (checkedTodos.isNotEmpty()) {
                 clearButton.isEnabled = true
                 clearButton.setOnClickListener {
-                viewModel.deleteCheckedTodos(checkedTodos)
+                    viewModel.deleteCheckedTodos(checkedTodos)
                 }
             } else {
                 clearButton.isEnabled = false

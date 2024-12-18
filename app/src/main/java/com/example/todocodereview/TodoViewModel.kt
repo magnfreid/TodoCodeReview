@@ -1,49 +1,38 @@
 package com.example.todocodereview
 
-
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
-class TodoViewModel(context: Context) : ViewModel() {
+class TodoViewModel : ViewModel() {
 
-    private val database = DatabaseHandler(context).database
+    private val todoRepository = TodoRepository()
 
-    val todos: LiveData<MutableList<Todo>> get() = database.todoDao().getAll()
+    val todos: LiveData<List<Todo>> get() = todoRepository.todos.asLiveData()
 
-    val checkedTodos: LiveData<MutableList<Todo>> get() = database.todoDao().getChecked(true)
+    val checkedTodos: LiveData<List<Todo>> get() = todoRepository.checkedTodos.asLiveData()
+
 
     fun insertTodo(todo: Todo) {
         viewModelScope.launch(Dispatchers.IO) {
-            database.todoDao().insert(todo)
+            todoRepository.insert(todo)
         }
     }
 
     fun deleteCheckedTodos(todos: List<Todo>) {
         viewModelScope.launch(Dispatchers.IO) {
-            database.todoDao().deleteChecked(todos)
+            todoRepository.deleteChecked(todos)
         }
     }
 
     fun updateTodoCheckbox(todoId: Int, isChecked: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
-            database.todoDao().updateCheckbox(todoId, isChecked)
+            todoRepository.updateCheckBox(todoId, isChecked)
         }
     }
 
-}
-
-class TodoViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(TodoViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return TodoViewModel(context) as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel class")
-    }
 }
