@@ -1,4 +1,4 @@
-package com.example.todocodereview
+package com.example.todocodereview.database
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

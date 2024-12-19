@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.todocodereview.database.Todo
+import com.example.todocodereview.database.TodoRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -35,4 +37,9 @@ class TodoViewModel : ViewModel() {
         }
     }
 
+    fun updateTodoText(todoId: Int, newText: String) {
+        viewModelScope.launch {
+            todoRepository.updateTodoText(todoId, newText)
+        }
+    }
 }

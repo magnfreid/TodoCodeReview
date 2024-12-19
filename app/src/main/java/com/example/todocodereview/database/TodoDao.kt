@@ -1,4 +1,4 @@
-package com.example.todocodereview
+package com.example.todocodereview.database
 
 import androidx.room.Dao
 import androidx.room.Delete
@@ -17,6 +17,9 @@ interface TodoDao {
 
     @Query("UPDATE todos SET isChecked = :isChecked WHERE id = :todoId")
     suspend fun updateCheckbox(todoId:Int, isChecked: Boolean)
+
+    @Query("UPDATE todos SET name = :newText WHERE id = :todoId ")
+    suspend fun updateText(todoId:Int, newText:String)
 
     @Query("SELECT * FROM todos")
     fun getAll(): Flow<List<Todo>>

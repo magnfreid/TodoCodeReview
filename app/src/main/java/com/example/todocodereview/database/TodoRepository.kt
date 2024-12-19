@@ -1,4 +1,4 @@
-package com.example.todocodereview
+package com.example.todocodereview.database
 
 import kotlinx.coroutines.flow.Flow
 
@@ -18,5 +18,9 @@ class TodoRepository {
 
     suspend fun updateCheckBox(todoID: Int, isChecked: Boolean) {
         todoDao.updateCheckbox(todoID, isChecked)
+    }
+
+    suspend fun updateTodoText(todoId: Int, newText:String) {
+        todoDao.updateText(todoId, newText)
     }
 }
